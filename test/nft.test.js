@@ -8,7 +8,8 @@ describe("NFT42", function () {
   beforeEach(async function () {
     [owner, addr1] = await ethers.getSigners();
     const NFT42Factory = await ethers.getContractFactory("NFT42");
-    nft = await NFT42Factory.deploy(owner.address);
+    const baseURI = "ipfs://test-uri/";
+    nft = await NFT42Factory.deploy(owner.address, baseURI);
   });
 
   describe("Deployment", function () {
@@ -39,6 +40,15 @@ describe("NFT42", function () {
         nft.connect(addr1).safeMint(addr1.address)
       ).to.be.revertedWithCustomError(nft, "OwnableUnauthorizedAccount")
        .withArgs(addr1.address);
+    });
+  });
+
+  describe("Token URI", function () {
+    it("Should return the correct tokenURI after minting", async function () {
+      const baseURI = "ipfs://test-uri/";
+      await nft.safeMint(addr1.address);
+      // For our contract, the tokenURI is constant for all tokens.
+      expect(await nft.tokenURI(0)).to.equal(baseURI);
     });
   });
 });

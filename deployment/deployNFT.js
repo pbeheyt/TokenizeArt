@@ -7,7 +7,8 @@ async function main() {
   console.log("Deploying NFT contract with the account:", deployer.address);
 
   const nftFactory = await ethers.getContractFactory("NFT42");
-  const nft = await nftFactory.deploy(deployer.address);
+  const baseURI = "https://gateway.pinata.cloud/ipfs/bafkreibn7tml7cewx4xsqxe4d42jmpga5zzy5ioylh77qm4xwt2enrrbrm";
+  const nft = await nftFactory.deploy(deployer.address, baseURI);
 
   await nft.waitForDeployment();
 
