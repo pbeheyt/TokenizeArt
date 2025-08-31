@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mint Your pbeheyt Art 42 NFT</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            border-radius: 10px;
+            background-color: #1e1e1e;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+        #mintButton {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        #mintButton:hover {
+            background-color: #0056b3;
+        }
+        #mintButton:active {
+            transform: scale(0.98);
+        }
+        #mintButton:disabled {
+            background-color: #333;
+            cursor: not-allowed;
+        }
+        #statusMessage {
+            margin-top: 25px;
+            font-size: 1em;
+            min-height: 24px; /* Prevents layout shift */
+            color: #a0a0a0;
+        }
+        a {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>pbeheyt Art 42</h1>
+        <button id="mintButton">Connect Wallet</button>
+        <p id="statusMessage">Please connect your wallet to mint an NFT.</p>
+    </div>
+
+    <!-- ethers.js library for interacting with the blockchain -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
+    <script>
+        // --- CONFIGURATION ---
+        const contractAddress = "0x5E4b723c5f6053dC9B62601FB97D20d5B6257aCE";
+        const targetChainId = '0x61'; // 97 in hexadecimal for BNB Smart Chain Testnet
+        const contractABI = [
+            { "inputs": [ { "internalType": "address", "name": "initialOwner", "type": "address" }, { "internalType": "string", "name": "baseTokenURI_", "type": "string" } ], "stateMutability": "nonpayable", "type": "constructor" },
+            { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "OwnableUnauthorizedAccount", "type": "error" },
+            { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "Transfer", "type": "event" },
+            { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" },
+            { "inputs": [], "name": "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" },
+            { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "ownerOf", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" },
+            { "inputs": [ { "internalType": "address", "name": "to", "type": "address" } ], "name": "safeMint", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+            { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" },
+            { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "tokenURI", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }
+        ];
+
+        // --- DOM ELEMENTS ---
+        const mintButton = document.getElementById('mintButton');
+        const statusMessage = document.getElementById('statusMessage');
+
+        // --- APP STATE ---
+        let userAccount = null;
+        let contract = null;
+        let signer = null;
+        let provider = null;
+
+        // --- FUNCTIONS ---
+        async function checkAndSwitchNetwork() {
+            try {
+                const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+                if (currentChainId !== targetChainId) {
+                    statusMessage.innerText = 'Wrong network detected. Please switch to BNB Testnet.';
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: targetChainId }],
+                    });
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+                return true;
+            } catch (switchError) {
+                if (switchError.code === 4902) {
+                    statusMessage.innerText = 'BNB Testnet not found. Adding it to MetaMask...';
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [ { chainId: targetChainId, chainName: 'BNB Smart Chain Testnet', rpcUrls: ['https://data-seed-prebsc-1-s1.bnbchain.org:8545/'], nativeCurrency: { name: 'tBNB', symbol: 'tBNB', decimals: 18 }, blockExplorerUrls: ['https://testnet.bscscan.com'] } ],
+                        });
+                        return true;
+                    } catch (addError) {
+                        console.error("Failed to add the network:", addError);
+                        statusMessage.innerText = 'Failed to add BNB Testnet. Please add it manually.';
+                        return false;
+                    }
+                }
+                console.error("Failed to switch network:", switchError);
+                statusMessage.innerText = 'Failed to switch network. Please do it manually in MetaMask.';
+                return false;
+            }
+        }
+
+        async function connectWallet() {
+            if (typeof window.ethereum === 'undefined') {
+                statusMessage.innerText = 'MetaMask is not installed!';
+                return;
+            }
+
+            try {
+                mintButton.disabled = true;
+                statusMessage.innerText = 'Checking network...';
+                
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                
+                const networkOK = await checkAndSwitchNetwork();
+                if (!networkOK) {
+                    mintButton.disabled = false;
+                    statusMessage.innerText = 'Please connect to BNB Testnet to continue.';
+                    return;
+                }
+                
+                statusMessage.innerText = 'Please connect your account in MetaMask...';
+                const accounts = await provider.send("eth_requestAccounts", []);
+                handleAccountsChanged(accounts);
+
+            } catch (error) {
+                console.error("Connection failed:", error);
+                if (error.code === -32002) {
+                    statusMessage.innerText = 'A MetaMask request is already open. Please resolve it and try again.';
+                } else {
+                    statusMessage.innerText = 'Wallet connection was rejected. Please try again.';
+                }
+            } finally {
+                mintButton.disabled = false;
+            }
+        }
+        
+        function handleAccountsChanged(accounts) {
+             if (accounts.length > 0) {
+                userAccount = accounts[0];
+                signer = provider.getSigner();
+                contract = new ethers.Contract(contractAddress, contractABI, signer);
+                mintButton.innerText = 'Mint NFT';
+                statusMessage.innerText = `Connected: ${userAccount.substring(0, 6)}...${userAccount.substring(userAccount.length - 4)}`;
+            } else {
+                userAccount = null;
+                contract = null;
+                signer = null;
+                mintButton.innerText = 'Connect Wallet';
+                statusMessage.innerText = 'Please connect your wallet to mint an NFT.';
+            }
+        }
+
+        async function mintNFT() {
+            if (!contract || !userAccount) {
+                statusMessage.innerText = 'Please connect your wallet first.';
+                return;
+            }
+
+            if (!(await checkAndSwitchNetwork())) return;
+
+            try {
+                mintButton.disabled = true;
+                statusMessage.innerText = 'Preparing transaction... Please approve in MetaMask.';
+                
+                const tx = await contract.safeMint(userAccount);
+                statusMessage.innerText = 'Minting in progress... Waiting for confirmation.';
+                
+                await tx.wait(); 
+
+                statusMessage.innerHTML = `Success! NFT minted. View transaction: <a href="https://testnet.bscscan.com/tx/${tx.hash}" target="_blank" rel="noopener noreferrer">${tx.hash.substring(0,10)}...</a>`;
+            
+            } catch (error) {
+                console.error("Minting failed:", error);
+                if (error.code === 'ACTION_REJECTED') {
+                    statusMessage.innerText = 'Transaction was rejected.';
+                } else if (error.message && error.message.includes("OwnableUnauthorizedAccount")) {
+                    statusMessage.innerText = 'Error: Only the contract owner can mint new NFTs.';
+                } else {
+                    statusMessage.innerText = 'Minting failed. See console for details.';
+                }
+            } finally {
+                 mintButton.disabled = false;
+            }
+        }
+
+        // --- INITIALIZATION & EVENT LISTENERS ---
+        mintButton.addEventListener('click', () => {
+            if (!userAccount) {
+                connectWallet();
+            } else {
+                mintNFT();
+            }
+        });
+
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', handleAccountsChanged);
+            window.ethereum.on('chainChanged', () => window.location.reload());
+        }
+
+    </script>
+</body>
+</html>
