@@ -1,0 +1,9 @@
+codebase*.md
+git-diff.md
+node_modules/
+artifacts/
+cache/
+coverage/
+dist/
+.env
+.env.*
