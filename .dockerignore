@@ -1,0 +1,22 @@
+# Git and project metadata
+.git
+.gitignore
+.dockerignore
+README.md
+codebase*.md
+git-diff.md
+prompt-auto-edit.md
+
+# Local dependencies (should be installed inside the container)
+node_modules/
+
+# Hardhat build artifacts and cache
+artifacts/
+cache/
+
+# Local environment variables (should be injected, not copied)
+.env
+.env.*
+
+# OS-specific files
+.DS_Store
