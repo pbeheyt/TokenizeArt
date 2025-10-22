@@ -56,6 +56,7 @@ This project is fully containerized using Docker, ensuring a consistent and repr
     -   `make test`: Runs the automated test suite.
     -   `make deploy`: Deploys the contract to BNB Testnet and saves deployment info.
     -   `make verify`: Verifies the deployed contract on BscScan using the saved info.
+    -   `make mint`: Mints a new NFT from the deployed contract to the owner's address.
     -   `make shell`: Opens an interactive shell inside the container.
 
 3.  **Stop the Service**: Stops and removes the container.

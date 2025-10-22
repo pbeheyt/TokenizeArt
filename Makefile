@@ -1,7 +1,7 @@
 # Define the docker-compose command to use
 COMPOSE_EXEC = docker-compose exec hardhat
 
-.PHONY: help build compile test deploy verify shell clean
+.PHONY: help build compile test deploy verify mint shell clean
 
 help:
 	@echo "Usage: make [target]"
@@ -11,7 +11,8 @@ help:
 	@echo "  compile     Compile the smart contracts"
 	@echo "  test        Run the test suite"
 	@echo "  deploy      Deploy NFT contract to the configured network (bscTestnet)"
-	@echo "  verify  		 Verify the deployed NFT contract on BscScan"
+	@echo "  verify      Verify the deployed NFT contract on BscScan"
+	@echo "  mint        Mint a new NFT from the deployed contract to the owner's address"
 	@echo "  shell       Start an interactive shell inside the hardhat container"
 	@echo "  clean       Stop and remove the Docker container"
 
@@ -34,6 +35,10 @@ deploy:
 # Verify the deployed NFT contract on BscScan
 verify:
 	$(COMPOSE_EXEC) npm run verify
+
+# Mint a new NFT from the deployed contract
+mint:
+	$(COMPOSE_EXEC) npm run mint
 
 # Access the container's shell
 shell:

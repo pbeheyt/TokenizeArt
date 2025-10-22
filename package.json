@@ -9,7 +9,8 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy": "hardhat run deployment/deployNFT.js --network bscTestnet",
-    "verify": "hardhat run deployment/verifyNFT.js --network bscTestnet"
+    "verify": "hardhat run deployment/verifyNFT.js --network bscTestnet",
+    "mint": "hardhat run mint/mintNFT.js --network bscTestnet"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.1.0",

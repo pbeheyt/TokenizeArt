@@ -132,7 +132,22 @@ Verification links your deployed bytecode to its source code, making the contrac
 
 ### Step 7.2: Mint Your First NFT
 
-Now that the contract is live and verified, you can mint your first token.
+Now that the contract is live and verified, you can mint your first token. There are two ways to do this: via the automated script (recommended for simplicity) or manually via BscScan (good for demonstration).
+
+#### Method A: Using the Automated Script (Recommended)
+
+This is the simplest and quickest method.
+
+1.  **Run the Mint Command**: In your terminal, at the project root, simply run:
+    ```shell
+    make mint
+    ```
+2.  **Process**: The script will automatically read the deployed contract address, connect using your wallet, and call the `safeMint` function to send a new NFT to your own address.
+3.  **Confirmation**: Wait for the script to display the confirmation message. Your NFT is now minted.
+
+#### Method B: Manually on BscScan
+
+This method is useful for demonstrating a deep understanding of contract interaction.
 
 1.  **Navigate to BscScan**: Open the BscScan URL for your contract address.
 2.  **Go to the "Contract" Tab**: You should see a green checkmark indicating the source code is verified.
@@ -140,7 +155,7 @@ Now that the contract is live and verified, you can mint your first token.
 4.  **Connect Your Wallet**: Click the "Connect to Web3" button and connect the MetaMask wallet you used for deployment (the contract owner).
 5.  **Execute `safeMint`**:
     -   Find the `safeMint` function in the list.
-    -   In the `to (address)` input field, paste your own wallet address (or any address you want to send the NFT to).
+    -   In the `to (address)` input field, paste your own wallet address.
     -   Click the "Write" button and confirm the transaction in your MetaMask wallet.
 
 ### Step 7.3: Confirm Ownership and View Metadata

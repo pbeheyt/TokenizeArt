@@ -49,3 +49,16 @@ This script automates the process of verifying the contract on BscScan.
 2.  **Handle Errors**: If the file doesn't exist, it exits gracefully with an informative error message.
 3.  **Run Verification Task**: It programmatically runs Hardhat's built-in `verify:verify` task. It passes an object containing the `address` and a `constructorArguments` array, which must contain the arguments in the exact same order as the constructor: `[deployerAddress, baseURI]`.
 4.  **Manage Existing Verification**: It includes logic to detect if the contract has already been verified, preventing unnecessary errors.
+
+---
+
+### 5. Script Breakdown: `mintNFT.js`
+
+Located in the `mint/` directory, this script automates the process of minting a new NFT after the contract has been deployed.
+
+**Logical Flow**:
+1.  **Get Owner Account**: It starts by getting the signer associated with the `PRIVATE_KEY` in the `.env` file. This is the account that will pay the gas fee for the minting transaction.
+2.  **Read Deployment Info**: Just like the verification script, it reads the `.deployment-info-nft.json` file to find the address of the contract to interact with.
+3.  **Instantiate Contract**: It uses `ethers.getContractAt()` to create a local JavaScript object that represents the smart contract already living on the blockchain.
+4.  **Call `safeMint`**: It calls the `safeMint` function of the contract, passing the owner's own address as the recipient.
+5.  **Wait for Confirmation**: It sends the transaction and waits for it to be mined and confirmed, then logs a success message.
