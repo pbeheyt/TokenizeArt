@@ -9,8 +9,6 @@ import fs from "fs";
 import path from "path";
 
 async function main() {
-  console.log("--- NFT Minting Script ---");
-
   // 1. Get the account that will execute the minting transaction
   const [deployer] = await ethers.getSigners();
   console.log(`Using account: ${deployer.address}`);
