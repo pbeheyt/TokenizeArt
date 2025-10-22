@@ -14,8 +14,8 @@ This project builds upon the same professional Hardhat and Docker environment es
 ## Deployment Details
 
 -   **Network**: BNB Smart Chain Testnet
--   **NFT Contract Address**: `0x5E4b723c5f6053dC9B62601FB97D20d5B6257aCE`
--   **BscScan Link**: [**View Verified Contract**](https://testnet.bscscan.com/address/0x5E4b723c5f6053dC9B62601FB97D20d5B6257aCE)
+-   **NFT Contract Address**: `0xeCc1222673281DefF17edAC81c17d2A0BD3f02e1`
+-   **BscScan Link**: [**View Verified Contract**](https://testnet.bscscan.com/address/0xeCc1222673281DefF17edAC81c17d2A0BD3f02e1)
 -   **Metadata**: The metadata for all tokens is permanently stored on IPFS and can be viewed here: [View Metadata](https://gateway.pinata.cloud/ipfs/bafkreibn7tml7cewx4xsqxe4d42jmpga5zzy5ioylh77qm4xwt2enrrbrm)
 
 ---
@@ -52,11 +52,17 @@ This project is fully containerized using Docker, ensuring a consistent and repr
     ```
 
 2.  **Core Commands**:
-    -   `make compile`: Compiles smart contracts.
-    -   `make test`: Runs the automated test suite.
-    -   `make deploy`: Deploys the contract to BNB Testnet and saves deployment info.
-    -   `make verify`: Verifies the deployed contract on BscScan using the saved info.
-    -   `make mint`: Mints a new NFT from the deployed contract to the owner's address.
+
+    **Local Development & Testing**:
+    -   `make compile`: Compiles the smart contracts.
+    -   `make test`: Runs the automated test suite against a local simulated blockchain.
+
+    **Network Interaction (BNB Testnet)**:
+    -   `make deploy`: Deploys the contract to the testnet.
+    -   `make verify`: Verifies the deployed contract on BscScan.
+    -   `make mint`: Mints a new NFT from the deployed contract.
+
+    **Utility**:
     -   `make shell`: Opens an interactive shell inside the container.
 
 3.  **Stop the Service**: Stops and removes the container.

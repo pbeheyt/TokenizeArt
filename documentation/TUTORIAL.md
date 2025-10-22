@@ -46,7 +46,6 @@ A dedicated wallet for development is a security best practice.
         -   **Block explorer URL**: `https://testnet.bscscan.com`
 4.  **Acquire Testnet Funds (tBNB)**:
     -   Use the official **BNB Chain Faucet** to receive testnet funds, as recommended in the project subjects. Link: [testnet.bnbchain.org/faucet-smart](https://testnet.bnbchain.org/faucet-smart).
-    -   You may need to solve a captcha and paste your wallet's `0x...` address to receive tBNB.
 
 ## 4. Preparing Artwork and Metadata
 
@@ -110,11 +109,11 @@ The `Makefile` serves as the control panel for the entire project. All commands 
     ```
     The output will be your deployed contract's address, which you will need for the next step.
 
-## 7. Automated Verification, Minting, and Viewing
+## 7. Interacting with the Deployed Contract
 
-This section details the final steps using our professional, script-based workflow.
+Once your contract is deployed, this section covers the lifecycle of interacting with it: verification, minting the first token, and confirming its existence.
 
-### Step 7.1: Verify the Contract on BscScan
+### Step 7.1: Verification on BscScan
 
 Verification links your deployed bytecode to its source code, making the contract transparent and easy to interact with. Our project automates this process.
 
@@ -130,7 +129,7 @@ Verification links your deployed bytecode to its source code, making the contrac
     ```
     This command automatically retrieves the deployed contract's address and constructor arguments from the `.deployment-info-nft.json` file and submits them for verification.
 
-### Step 7.2: Mint Your First NFT
+### Step 7.2: Minting the First NFT
 
 Now that the contract is live and verified, you can mint your first token. There are two ways to do this: via the automated script (recommended for simplicity) or manually via BscScan (good for demonstration).
 
@@ -158,7 +157,7 @@ This method is useful for demonstrating a deep understanding of contract interac
     -   In the `to (address)` input field, paste your own wallet address.
     -   Click the "Write" button and confirm the transaction in your MetaMask wallet.
 
-### Step 7.3: Confirm Ownership and View Metadata
+### Step 7.3: Confirming the Result
 
 1.  **Confirm Ownership**:
     -   Navigate to the **"Read Contract"** sub-tab on BscScan.
