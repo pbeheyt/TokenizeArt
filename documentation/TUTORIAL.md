@@ -45,8 +45,8 @@ A dedicated wallet for development is a security best practice.
         -   **Currency Symbol**: `tBNB`
         -   **Block explorer URL**: `https://testnet.bscscan.com`
 4.  **Acquire Testnet Funds (tBNB)**:
-    -   Use a developer-friendly faucet like the **Triangle Platform Faucet**: [faucet.triangleplatform.com/bnb/testnet](https://faucet.triangleplatform.com/bnb/testnet).
-    -   Paste your wallet's `0x...` address to receive funds.
+    -   Use the official **BNB Chain Faucet** to receive testnet funds, as recommended in the project subjects. Link: [testnet.bnbchain.org/faucet-smart](https://testnet.bnbchain.org/faucet-smart).
+    -   You may need to solve a captcha and paste your wallet's `0x...` address to receive tBNB.
 
 ## 4. Preparing Artwork and Metadata
 
