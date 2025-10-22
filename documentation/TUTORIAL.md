@@ -87,21 +87,49 @@ Secret keys are managed via a `.env` file, which is excluded from version contro
     ```
     The output will be your deployed contract's address.
 
-## 7. Verification, Minting, and Viewing
+## 7. Automated Verification, Minting, and Viewing
 
-1.  **Run Verification**: This makes your contract readable on BscScan. You need the contract address from the deploy step, your wallet address, and your IPFS metadata URL.
+This section details the final steps using our professional, script-based workflow.
+
+### Step 7.1: Verify the Contract on BscScan
+
+Verification links your deployed bytecode to its source code, making the contract transparent and easy to interact with. Our project automates this process.
+
+1.  **Deploy the Contract**: If you haven't already, run the deployment command.
     ```shell
-    # Replace placeholders with your actual data
-    npx hardhat verify --network bscTestnet <YOUR_CONTRACT_ADDRESS> <YOUR_WALLET_ADDRESS> "https://gateway.pinata.cloud/ipfs/<YOUR_METADATA_CID>"
+    make deploy
     ```
-2.  **Mint Your First NFT**:
-    -   Go to your verified contract on BscScan and open the **"Write Contract"** tab.
-    -   Connect your MetaMask wallet.
-    -   Find the `safeMint` function.
-    -   In the `to (address)` field, paste your own wallet address.
-    -   Click "Write" and confirm the transaction in MetaMask.
-3.  **View Your NFT (The Foolproof Way)**:
-    -   On BscScan, go to the **"Read Contract"** tab.
-    -   Use the `tokenURI` function with `tokenId` 0. It will return your IPFS metadata URL.
-    -   Open this URL in a new tab. You will see the raw JSON.
-    -   This JSON contains another IPFS link for the `image`. Open *that* link to see your artwork, served directly from the decentralized web.
+    This will output the contract address and a link to BscScan.
+
+2.  **Run Automated Verification**: Once the deployment transaction is confirmed on the blockchain (usually within a few seconds), run the verification command:
+    ```shell
+    make verify
+    ```
+    This command automatically retrieves the deployed contract's address and constructor arguments from the `.deployment-info-nft.json` file and submits them for verification.
+
+### Step 7.2: Mint Your First NFT
+
+Now that the contract is live and verified, you can mint your first token.
+
+1.  **Navigate to BscScan**: Open the BscScan URL for your contract address.
+2.  **Go to the "Contract" Tab**: You should see a green checkmark indicating the source code is verified.
+3.  **Select "Write Contract"**: Click on the "Write Contract" sub-tab.
+4.  **Connect Your Wallet**: Click the "Connect to Web3" button and connect the MetaMask wallet you used for deployment (the contract owner).
+5.  **Execute `safeMint`**:
+    -   Find the `safeMint` function in the list.
+    -   In the `to (address)` input field, paste your own wallet address (or any address you want to send the NFT to).
+    -   Click the "Write" button and confirm the transaction in your MetaMask wallet.
+
+### Step 7.3: Confirm Ownership and View Metadata
+
+1.  **Confirm Ownership**:
+    -   Navigate to the **"Read Contract"** sub-tab on BscScan.
+    -   Find the `ownerOf` function.
+    -   Enter `0` for the `tokenId` (since it's the first one you minted) and click "Query".
+    -   The result should be the address you minted the NFT to.
+
+2.  **View Metadata**:
+    -   In the same "Read Contract" tab, find the `tokenURI` function.
+    -   Enter `0` for the `tokenId` and click "Query".
+    -   This will return your IPFS metadata URL (e.g., `https://gateway.pinata.cloud/ipfs/...`).
+    -   Open this URL in a new browser tab. You will see the raw JSON metadata. The `image` field in this JSON contains the final IPFS link to your artwork.

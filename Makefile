@@ -1,7 +1,7 @@
 # Define the docker-compose command to use
 COMPOSE_EXEC = docker-compose exec hardhat
 
-.PHONY: help build compile test deploy verify-nft shell clean
+.PHONY: help build compile test deploy verify shell clean
 
 help:
 	@echo "Usage: make [target]"
