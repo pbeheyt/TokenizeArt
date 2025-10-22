@@ -9,13 +9,23 @@ This document is a step-by-step technical guide for setting up the project envir
 -   **BEP-721 (NFT)**: The standard for Non-Fungible Tokens on BSC. "Non-Fungible" means each token is unique and has its own specific ID and metadata, like a numbered art print.
 -   **IPFS (InterPlanetary File System)**: A decentralized network for storing files. We use it to store our artwork and metadata, ensuring they can't be taken down by a single entity.
 
-## 2. Local Environment Setup
+## 2. Project Setup (Docker Workflow)
 
-1.  **Install Node.js**: Requires Node.js (v18+). Download from [nodejs.org](https://nodejs.org/).
-2.  **Clone Repository**: `git clone <your-repo-url> && cd TokenizeArt`
-3.  **Install Dependencies**: Downloads all project tools (Hardhat, ethers.js, etc.).
+This project is fully containerized, meaning you do not need to install Node.js or any other dependencies on your local machine. The only prerequisites are Git and Docker.
+
+1.  **Prerequisites**:
+    -   **Git**: To clone the repository.
+    -   **Docker Desktop**: Must be installed and running. Download from [docker.com](https://www.docker.com/).
+
+2.  **Clone Repository**:
     ```shell
-    npm install
+    git clone <your-repo-url> && cd TokenizeArt
+    ```
+
+3.  **Build and Start the Environment**:
+    This single command builds the Docker image, starts the container, and installs all necessary dependencies *inside* the container. It's the only setup command you'll ever need.
+    ```shell
+    make build
     ```
 
 ## 3. Wallet Setup & Funding
@@ -77,15 +87,28 @@ Secret keys are managed via a `.env` file, which is excluded from version contro
 3.  **Set `PRIVATE_KEY`**: In MetaMask: `(⋮) Menu` -> `Account details` -> `Show private key`. Copy/paste the value.
 4.  **Set `ETHERSCAN_API_KEY`**: Create an account at [etherscan.io](https://etherscan.io/) -> `API Keys` -> create a new key. Copy/paste the value.
 
-## 6. Development & Deployment
+## 6. Project Workflow via Makefile
 
-1.  **Compile**: `npx hardhat compile`
-2.  **Test**: `npx hardhat test`
-3.  **Deploy**: This command publishes your contract to the BNB Testnet. It uses the IPFS URI you prepared.
+The `Makefile` serves as the control panel for the entire project. All commands are run from the project root.
+
+1.  **Compile the Smart Contract**:
+    This command runs the Solidity compiler inside the Docker container.
     ```shell
-    npx hardhat run deployment/deployNFT.js --network bscTestnet
+    make compile
     ```
-    The output will be your deployed contract's address.
+
+2.  **Run the Test Suite**:
+    This executes the automated tests in `test/nft.test.js` to ensure the contract logic is secure and correct.
+    ```shell
+    make test
+    ```
+
+3.  **Deploy to BNB Testnet**:
+    This is the command to publish your contract on the public test network.
+    ```shell
+    make deploy
+    ```
+    The output will be your deployed contract's address, which you will need for the next step.
 
 ## 7. Automated Verification, Minting, and Viewing
 
