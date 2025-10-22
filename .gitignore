@@ -7,3 +7,6 @@ coverage/
 dist/
 .env
 .env.*
+
+# Deployment artifacts
+.deployment-info*.json
